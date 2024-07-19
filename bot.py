@@ -2,6 +2,8 @@
 # Subscribe YouTube Channel For Amazing Bot @Tech_VJ
 # Ask Doubt on telegram @KingVJ01
 
+# Clone Code Credit : YT - @Tech_VJ / TG - @VJ_Bots / GitHub - @VJBots
+
 import sys, glob, importlib, logging, logging.config, pytz, asyncio
 from pathlib import Path
 
@@ -28,6 +30,7 @@ from Script import script
 from datetime import date, datetime 
 from aiohttp import web
 from plugins import web_server
+from plugins.clone import restart_bots
 
 from TechVJ.bot import TechVJBot
 from TechVJ.util.keepalive import ping_server
@@ -62,6 +65,7 @@ async def start():
     temp.BANNED_CHATS = b_chats
     await Media.ensure_indexes()
     me = await TechVJBot.get_me()
+    temp.BOT = TechVJBot
     temp.ME = me.id
     temp.U_NAME = me.username
     temp.B_NAME = me.first_name
@@ -72,6 +76,10 @@ async def start():
     now = datetime.now(tz)
     time = now.strftime("%H:%M:%S %p")
     await TechVJBot.send_message(chat_id=LOG_CHANNEL, text=script.RESTART_TXT.format(today, time))
+    if CLONE_MODE == True:
+        print("Restarting All Clone Bots.......")
+        await restart_bots()
+        print("Restarted All Clone Bots.")
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0"
